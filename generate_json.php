@@ -101,22 +101,25 @@ function fetchMatches($timeData, $mainReferer, $userAgent) {
     return $dailyMatches;
 }
 
-    $mainReferer = "https://socolivev.co/";
-    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? "Default-User-Agent";
+$mainReferer = "https://socolivev.co/";
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? "Default-User-Agent";
 
-    $currentDate = date('Ymd');
-    $nextDay = date('Ymd', strtotime('+1 day'));
-    $yesterday = date('Ymd', strtotime('-1 day'));
+$currentDate = date('Ymd');
+$nextDay = date('Ymd', strtotime('+1 day'));
+$yesterday = date('Ymd', strtotime('-1 day'));
 
-    $matchTimes = [$yesterday, $currentDate, $nextDay];
+$matchTimes = [$yesterday, $currentDate, $nextDay];
 
-    $allMatches = [];
-    foreach ($matchTimes as $time) {
-        $allMatches = array_merge($allMatches, fetchMatches($time, $mainReferer, $userAgent));
-    }
+$allMatches = [];
+foreach ($matchTimes as $time) {
+    $allMatches = array_merge($allMatches, fetchMatches($time, $mainReferer, $userAgent));
+}
 
-    header('Content-Type: application/json');
-    echo json_encode($allMatches, JSON_PRETTY_PRINT);
-    exit;
+// Save the JSON to a file in the repository
+file_put_contents("matches.json", json_encode($allMatches, JSON_PRETTY_PRINT));
 
+// (Optional) Output for debugging purposes
+echo json_encode($allMatches, JSON_PRETTY_PRINT);
+
+exit;
 ?>
