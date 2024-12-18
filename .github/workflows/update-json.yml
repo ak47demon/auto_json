@@ -1,4 +1,4 @@
-name: Auto Update JSON with PHP
+name: Auto Generate Matches JSON
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 jobs:
-  update-json:
+  generate-json:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,17 +16,17 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.0" # Change this to the PHP version your script requires
+          php-version: "8.0" # Adjust based on your PHP version requirements
 
-      - name: Run PHP script
+      - name: Run PHP Script
         run: php generate_json.php
 
-      - name: Commit and push changes
+      - name: Commit and Push Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add output.json
-          git commit -m "Auto-update JSON via PHP script"
+          git add matches.json
+          git commit -m "Auto-update matches.json"
           git push
